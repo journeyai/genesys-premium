@@ -1,11 +1,11 @@
 export default {
   "en-us": {
-    "txt-premium-app-name": "Premium App",
+    "txt-premium-app-name": "Journey App",
     "txt-premium-home": "Home",
     "txt-premium-install": "Install",
     "txt-premium-summary": "Summary",
     "txt-greeting": "Hi",
-    "txt-greeting-2": "Welcome to the Premium App Example Application",
+    "txt-greeting-2": "Welcome to the Journey App",
     "txt-start": "Start",
     "txt-setup": "Custom Setup",
     "txt-install": "Install",

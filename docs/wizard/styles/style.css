@@ -1,3 +1,9 @@
+:root {
+  --blue: #016fba;
+  --darkblue: #002a4e;
+  --green: #01ab4f;
+}
+
 * {
   margin: 0px;
   padding: 0px;
@@ -10,7 +16,7 @@ body {
 }
 
 body {
-  color: #4c4c4c;
+  color: var(--darkblue);
   font-family: "Roboto", "HelveticaNeue", "Helvetica", "Arial", sans-serif;
   font-size: 0.9em;
   display: flex;
@@ -87,7 +93,7 @@ p {
 }
 
 .success {
-  color: #00ae9e;
+  color: #0360ab;
   margin: 6px;
 }
 

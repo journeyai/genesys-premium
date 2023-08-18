@@ -6,10 +6,11 @@ export default {
 
   // The actual URL of the landing page of your web app or your web site (when wizard has been run).
   // previously - defined as premiumAppURL
-  // redirectURLOnWizardCompleted: 'http://localhost:8080/premium-app-sample/index.html',
+  redirectURLOnWizardCompleted:
+    "http://localhost:8080/premium-app-sample/index.html",
   // redirectURLOnWizardCompleted:
   //   "https://mypurecloud.github.io/purecloud-premium-app/premium-app-sample/index.html",
-  redirectURLOnWizardCompleted: "https://app.journeyid.io",
+  // redirectURLOnWizardCompleted: "https://app.journeyid.io",
   redirectURLWithParams: true,
 
   // Genesys Cloud assigned name for the premium app
