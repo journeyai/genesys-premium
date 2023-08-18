@@ -1,0 +1,26 @@
+{
+  "role": {
+    "Role": {
+      "id": "841d7e89-17c0-43e2-89f1-aaca9101a23c",
+      "name": "PREMIUM_EXAMPLE_Role"
+    }
+  },
+  "group": {
+    "Supervisors": {
+      "id": "33b8c366-e888-4482-aaeb-c09a3de3eaeb",
+      "name": "PREMIUM_EXAMPLE_Supervisors"
+    }
+  },
+  "app-instance": {
+    "Partner Enablement Tools": {
+      "id": "211e4070-6a69-4c7d-a7c8-1d41c56d9e88",
+      "name": "PREMIUM_EXAMPLE_Partner Enablement Tools"
+    }
+  },
+  "oauth-client": {
+    "OAuth Client": {
+      "id": "bedb3761-54c1-40d3-ab4e-bc335a8479ab",
+      "name": "PREMIUM_EXAMPLE_OAuth Client"
+    }
+  }
+}
