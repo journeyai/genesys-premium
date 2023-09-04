@@ -85,16 +85,11 @@
               <i class="fas fa-check-circle enlarge"></i>
               <div class="txt-product-available">Product Available</div>
             </div>
-            <div class="reminders">
-              <p class="txt-available-message">Reminders:</p>
-              <ul class="reminder-list">
-                <li>Remove the Uninstall button in your application</li>
-                <li>
-                  You may redirect to your application or to your web site by
-                  updating the redirectURLOnWizardCompleted in the
-                  /wizard/config/config.js file
-                </li>
-              </ul>
+            <div>
+              <p>
+                Welcome! This app will streamline the process of creating
+                Journey pipelines and integrating them into your call flows.
+              </p>
             </div>
             <button class="btn-next" class="btn-info right">
               <span class="txt-start">Start</span>
@@ -106,18 +101,13 @@
         <!-- This is where you can put custom fields or custom functionality for your wizard -->
         <div id="custom-setup-page">
           <p>
-            To utilize a refresh token, please enter your
-            <br /><br />
-
-            client_id:
-            <input type="text" />
-
-            client_secret:
-            <input type="text" />
-
-            <br /><br />
-            Update the ./docs/wizard/scripts/main.js to call your custom
-            provisioning functions.
+            This installation wizard will create a custom Web Services
+            integration and several Data Actions for you. These provide
+            connections to the Journey APIs.
+          </p>
+          <p>
+            To complete setup, you must create an API key using the Journey app,
+            and add it to the Journey web services integration.
           </p>
 
           <!-- Don't remove buttons below -->
