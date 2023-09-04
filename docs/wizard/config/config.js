@@ -2,14 +2,12 @@ export default {
   clientID: "f79f98a7-1100-492a-8cea-5735dd6de976",
 
   wizardUriBase: "http://localhost:8080/wizard/",
-  // wizardUriBase: "https://mypurecloud.github.io/purecloud-premium-app/wizard/",
+  // wizardUriBase: "https://journeyai.github.io/genesys-premium/wizard/",
 
   // The actual URL of the landing page of your web app or your web site (when wizard has been run).
   // previously - defined as premiumAppURL
   redirectURLOnWizardCompleted:
     "http://localhost:8080/premium-app-sample/index.html",
-  // redirectURLOnWizardCompleted:
-  //   "https://mypurecloud.github.io/purecloud-premium-app/premium-app-sample/index.html",
   // redirectURLOnWizardCompleted: "https://app.journeyid.io",
   redirectURLWithParams: true,
 
@@ -56,7 +54,7 @@ export default {
   genesysCloudHostOriginQueryParam: "hostOrigin",
   genesysCloudTargetEnvQueryParam: "targetEnv",
 
-  // Enable the optional 'Step 2' in the provisoning process
+  // Enable the optional 'Step 2' in the provisioning process
   // If false, it will not show the page or the step in the wizard
   enableCustomSetupPageBeforeInstall: true,
   // Enable the optional Post Custom Setup module in the install process
@@ -74,7 +72,7 @@ export default {
   enableUninstall: true,
 
   // To be added to names of Genesys Cloud objects created by the wizard
-  prefix: "PREMIUM_EXAMPLE_",
+  prefix: "JOURNEY_APP_",
 
   // These are the Genesys Cloud items that will be added and provisioned by the wizard
   // To see the sample configuration of all possible objects please consult
@@ -120,6 +118,177 @@ export default {
          * Please read about the Post Custom Setup module here:
          * https://developer.genesys.cloud/appfoundry/premium-app-wizard/7-custom-setup#post-custom-setup-module
          */
+      },
+    ],
+    "ws-data-actions": [
+      {
+        name: "Web Services (API Key)",
+        autoEnable: true,
+        credentialType: "userDefined",
+        credentials: {
+          apiKey: "123",
+        },
+        notes:
+          "Update the Journey api key under the credentials tab.\nIt should be a 'user defined' credential type, with the field name 'apiKey'.",
+        "data-actions": [
+          // ----- ws data action #1: ExecutePipeline -----
+          {
+            name: "ExecutePipeline",
+            secure: false,
+            autoPublish: true,
+            config: {
+              request: {
+                requestUrlTemplate:
+                  "https://app.journeyid.io/api/system/executions",
+                requestType: "POST",
+                headers: {
+                  Accept: "application/json",
+                  Authorization: "Bearer ${credentials.apiKey}",
+                  "Content-Type": "application/json",
+                },
+                requestTemplate:
+                  '{ "pipelineKey": "${input.pipelineKey}", "delivery": { "method": "${input.deliveryMethod}", "phoneNumber": "${input.userPhoneNumber}" }, "customer": { "uniqueId": "${input.userUniqueId}" }, "session": { "externalRef": "${input.interactionId}" }, "language": "en-US"}',
+              },
+              response: {
+                translationMap: {
+                  executionId: "$.id",
+                },
+                translationMapDefaults: {},
+                successTemplate: '{"executionId": ${executionId}}',
+              },
+            },
+            contract: {
+              input: {
+                inputSchema: {
+                  title: "Journey",
+                  type: "object",
+                  properties: {
+                    pipelineKey: {
+                      type: "string",
+                    },
+                    interactionId: {
+                      type: "string",
+                    },
+                    userPhoneNumber: {
+                      type: "string",
+                    },
+                    userUniqueId: {
+                      type: "string",
+                    },
+                    deliveryMethod: {
+                      type: "string",
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+              output: {
+                successSchema: {
+                  type: "object",
+                  properties: {
+                    executionId: {
+                      type: "string",
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+            },
+          },
+
+          // ----- ws data action #2: CheckForCompletion -----
+          {
+            name: "CheckForCompletion",
+            secure: false,
+            autoPublish: true,
+            config: {
+              request: {
+                requestUrlTemplate:
+                  "https://app.journeyid.io/api/system/executions/${input.ID}",
+                requestType: "GET",
+                headers: {
+                  Accept: "application/json",
+                  Authorization: "Bearer ${credentials.apiKey}",
+                  "Content-Type": "application/json",
+                },
+                requestTemplate: "${input.rawRequest}",
+              },
+              response: {
+                translationMap: {},
+                translationMapDefaults: {},
+                successTemplate: "${rawResult}",
+              },
+            },
+            contract: {
+              input: {
+                inputSchema: {
+                  title: "Journey",
+                  type: "object",
+                  properties: {
+                    ID: {
+                      type: "string",
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+              output: {
+                successSchema: {
+                  type: "object",
+                  properties: {
+                    completedAt: {
+                      type: "string",
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+            },
+          },
+
+          // ----- ws data action #3: LookupCustomer -----
+          {
+            name: "LookupCustomer",
+            secure: false,
+            autoPublish: true,
+            config: {
+              request: {
+                requestUrlTemplate:
+                  "https://app.journeyid.io/api/system/customers/lookup?unique_id=${input.uniqueId}",
+                requestType: "GET",
+                headers: {
+                  authorization: "Bearer ${credentials.apiKey}",
+                },
+                requestTemplate: "${input.rawRequest}",
+              },
+              response: {
+                translationMap: {},
+                translationMapDefaults: {},
+                successTemplate: "${rawResult}",
+              },
+            },
+            contract: {
+              input: {
+                inputSchema: {
+                  type: "object",
+                  properties: {
+                    uniqueId: {
+                      type: "string",
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+              output: {
+                successSchema: {
+                  type: "object",
+                  properties: {},
+                  additionalProperties: true,
+                },
+              },
+            },
+          },
+        ],
       },
     ],
   },

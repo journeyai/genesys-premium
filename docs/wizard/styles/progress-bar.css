@@ -67,7 +67,7 @@
 
 .step:after {
   width: 0;
-  background-color: #3b90aa;
+  background-color: var(--green);
 }
 
 .step--complete:after {
@@ -126,14 +126,14 @@
 }
 
 .step--incomplete.step--active .step__icon {
-  border-color: #3b90aa;
+  border-color: var(--green);
   transition-delay: 0.5s;
 }
 
 .step--complete .step__icon {
   animation: bounce 0.5s ease-in-out;
-  background-color: #3b90aa;
-  border-color: #3b90aa;
+  background-color: var(--green);
+  border-color: var(--green);
   color: #fff;
 }
 

@@ -9,10 +9,16 @@ This projects contains a sample premium app and an automated on-boarding flow fo
 
 ## Usage
 
+### Development
+
+During dev, run node.js to serve the app:
+
 ```sh
 npm i
 node index.js
 ```
+
+Also adjust `docs/wizard/config/config.js` to point towards localhost for `wizardUriBase` and `redirectURLOnWizardCompleted`.
 
 Open:
 

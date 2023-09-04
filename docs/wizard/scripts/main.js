@@ -262,7 +262,7 @@ function setEventListeners() {
 }
 
 /**
- * Checks if the user has the necessary intall permissions
+ * Checks if the user has the necessary install permissions
  * based on config.checkInstallPermissions
  * @returns {Array} Array of string. Missing permissions.
  */
