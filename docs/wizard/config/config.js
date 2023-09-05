@@ -8,7 +8,7 @@ export default {
   // previously - defined as premiumAppURL
   redirectURLOnWizardCompleted:
     "http://localhost:8080/premium-app-sample/index.html",
-  // redirectURLOnWizardCompleted: "https://app.journeyid.io",
+  redirectURLOnWizardCompleted: "https://app.journeyid.io",
   redirectURLWithParams: true,
 
   // Genesys Cloud assigned name for the premium app
@@ -99,27 +99,27 @@ export default {
           "Supervisors have the ability to watch a queue for ACD conversations.",
       },
     ],
-    "app-instance": [
-      {
-        name: "Partner Enablement Tools",
-        url: "https://genesysappfoundry.github.io/partner-enablement-tools/index.html?langTag={{gcLangTag}}&hostOrigin={{gcHostOrigin}}&targetEnv={{gcTargetEnv}}",
-        type: "standalone",
-        groups: ["Supervisors"],
-      },
-    ],
-    "oauth-client": [
-      {
-        name: "OAuth Client",
-        description: "Generated Client that's passed to the App Backend",
-        roles: ["Role"],
-        authorizedGrantType: "CLIENT-CREDENTIALS",
-        /** NOTE:
-         * If you want to learn how you can send the created credentials back to your system,
-         * Please read about the Post Custom Setup module here:
-         * https://developer.genesys.cloud/appfoundry/premium-app-wizard/7-custom-setup#post-custom-setup-module
-         */
-      },
-    ],
+    // "app-instance": [
+    //   {
+    //     name: "Partner Enablement Tools",
+    //     url: "https://genesysappfoundry.github.io/partner-enablement-tools/index.html?langTag={{gcLangTag}}&hostOrigin={{gcHostOrigin}}&targetEnv={{gcTargetEnv}}",
+    //     type: "standalone",
+    //     groups: ["Supervisors"],
+    //   },
+    // ],
+    // "oauth-client": [
+    //   {
+    //     name: "OAuth Client",
+    //     description: "Generated Client that's passed to the App Backend",
+    //     roles: ["Role"],
+    //     authorizedGrantType: "CLIENT-CREDENTIALS",
+    //     /** NOTE:
+    //      * If you want to learn how you can send the created credentials back to your system,
+    //      * Please read about the Post Custom Setup module here:
+    //      * https://developer.genesys.cloud/appfoundry/premium-app-wizard/7-custom-setup#post-custom-setup-module
+    //      */
+    //   },
+    // ],
     "ws-data-actions": [
       {
         name: "Web Services (API Key)",
@@ -251,6 +251,7 @@ export default {
             name: "LookupCustomer",
             secure: false,
             autoPublish: true,
+
             config: {
               request: {
                 requestUrlTemplate:
@@ -282,7 +283,53 @@ export default {
               output: {
                 successSchema: {
                   type: "object",
-                  properties: {},
+                  properties: {
+                    id: {
+                      type: "string",
+                    },
+                    type: {
+                      type: "string",
+                    },
+                    uniqueId: {
+                      type: "string",
+                    },
+                    firstName: {
+                      type: "string",
+                    },
+                    lastName: {
+                      type: "string",
+                    },
+                    phoneNumbers: {
+                      type: "array",
+                      items: {
+                        title: "Item 1",
+                        type: "string",
+                      },
+                    },
+                    devices: {
+                      type: "array",
+                      items: {
+                        title: "Item 1",
+                        type: "string",
+                      },
+                    },
+                    email: {
+                      type: "string",
+                    },
+                    enrollments: {
+                      type: "array",
+                      items: {
+                        title: "Item 1",
+                        type: "object",
+                        properties: {
+                          type: {
+                            type: "string",
+                          },
+                        },
+                        additionalProperties: true,
+                      },
+                    },
+                  },
                   additionalProperties: true,
                 },
               },
