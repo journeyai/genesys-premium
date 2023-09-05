@@ -1,0 +1,257 @@
+inboundCall:
+  name: Journey IB - Main
+  division: Home
+  startUpRef: "/inboundCall/tasks/task[call start_20]"
+  defaultLanguage: en-us
+  supportedLanguages:
+    en-us:
+      defaultLanguageSkill:
+        noValue: true
+      textToSpeech:
+        defaultEngine:
+          voice: Jill
+  initialGreeting:
+    tts: Hello, thank you for calling.
+  variables:
+    - stringVariable:
+        name: Flow.userPhoneNumber
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.userUniqueId
+        initialValue:
+          noValue: true
+  settingsActionDefaults:
+    playAudioOnSilence:
+      timeout:
+        lit:
+          seconds: 40
+    detectSilence:
+      timeout:
+        lit:
+          seconds: 40
+    callData:
+      processingPrompt:
+        noValue: true
+    collectInput:
+      noEntryTimeout:
+        lit:
+          seconds: 5
+    dialByExtension:
+      interDigitTimeout:
+        lit:
+          seconds: 6
+    transferToUser:
+      connectTimeout:
+        noValue: true
+    transferToNumber:
+      connectTimeout:
+        noValue: true
+    transferToGroup:
+      connectTimeout:
+        noValue: true
+    transferToFlowSecure:
+      connectTimeout:
+        lit:
+          seconds: 15
+  settingsErrorHandling:
+    errorHandling:
+      disconnect:
+        none: true
+    preHandlingAudio:
+      tts: Sorry, an error occurred. Please try your call again.
+  settingsMenu:
+    extensionDialingMaxDelay:
+      lit:
+        seconds: 1
+    listenForExtensionDialing:
+      lit: true
+    menuSelectionTimeout:
+      lit:
+        seconds: 10
+    repeatCount:
+      lit: 3
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  settingsSpeechRec:
+    completeMatchTimeout:
+      lit:
+        ms: 100
+    incompleteMatchTimeout:
+      lit:
+        ms: 1500
+    maxSpeechLengthTimeout:
+      lit:
+        seconds: 20
+    minConfidenceLevel:
+      lit: 50
+    asrCompanyDir: none
+    asrEnabledOnFlow: true
+    suppressRecording: false
+  tasks:
+    - task:
+        name: call start
+        refId: call start_20
+        variables:
+          - booleanVariable:
+              name: Task.enrolledWebauthn
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+        actions:
+          - initializeFlowOutcome:
+              name: Initialize Flow Outcome
+              flowOutcome:
+                name: Journey_Demo
+          - updateData:
+              name: Set user phoneNumber & uniqueId
+              statements:
+                - string:
+                    variable: Flow.userUniqueId
+                    value:
+                      exp: 'Replace(Call.Ani,"tel:+","")'
+                - string:
+                    variable: Flow.userPhoneNumber
+                    value:
+                      exp: 'Replace(Call.Ani,"tel:","")'
+          - callCommonModule:
+              name: Call Common Module
+              commonModule:
+                Journey_EnrolledWebauthn:
+                  ver_latestPublished:
+                    inputs:
+                      Common.uniqueId:
+                        exp: Flow.userUniqueId
+                    outputs:
+                      Common.enrolledWebauthn:
+                        var: Task.enrolledWebauthn
+          - decision:
+              name: Decision
+              condition:
+                exp: Task.enrolledWebauthn
+              outputs:
+                "yes":
+                  actions:
+                    - jumpToTask:
+                        name: Jump to Reusable Task
+                        targetTaskRef: "/inboundCall/tasks/task[Journey_Authenticate_12]"
+                "no":
+                  actions:
+                    - jumpToTask:
+                        name: Jump to Reusable Task
+                        targetTaskRef: "/inboundCall/tasks/task[Journey_Transfer_37]"
+    - task:
+        name: Journey_Authenticate
+        refId: Journey_Authenticate_12
+        variables:
+          - booleanVariable:
+              name: Task.authSuccess
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: Task.executionId
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+        actions:
+          - callCommonModule:
+              name: Call Common Module
+              commonModule:
+                Journey_ExecutePipeline:
+                  ver_latestPublished:
+                    inputs:
+                      Common.uniqueId:
+                        exp: Flow.userUniqueId
+                      Common.pipelineKey:
+                        lit: af7d333e-4b43-48c3-88d0-667f43099626
+                      Common.conversationId:
+                        exp: Call.ConversationId
+                      Common.phoneNumber:
+                        exp: Flow.userPhoneNumber
+                      Common.deliveryMethod:
+                        lit: sms
+                    outputs:
+                      Common.executionId:
+                        var: Task.executionId
+          - playAudio:
+              name: Play Audio
+              audio:
+                tts: For the fastest and most secure experience, please authenticate using the text message we just sent to your phone.
+          - callCommonModule:
+              name: Call Common Module
+              commonModule:
+                Journey_PollCompletion:
+                  ver_latestPublished:
+                    inputs:
+                      Common.executionId:
+                        exp: Task.executionId
+                    outputs:
+                      Common.success:
+                        var: Task.authSuccess
+          - decision:
+              name: Decision
+              condition:
+                exp: Task.authSuccess
+              outputs:
+                "yes":
+                  actions:
+                    - playAudio:
+                        name: Play Audio
+                        audio:
+                          tts: Perfect! I can see you've authenticated successfully.
+                "no":
+                  actions:
+                    - playAudio:
+                        name: Play Audio
+                        audio:
+                          tts: Hmm, that didn't work.
+          - jumpToTask:
+              name: Jump to Reusable Task
+              targetTaskRef: "/inboundCall/tasks/task[Journey_Transfer_37]"
+    - task:
+        name: Journey_Transfer
+        refId: Journey_Transfer_37
+        actions:
+          - setScreenPop:
+              name: Set Screen Pop star
+              screenPopScript:
+                Agent - Journey iFrame:
+                  inputs:
+                    userPhoneNumber:
+                      exp: Replace(Flow.userPhoneNumber, "+", "%2B")
+                    userUniqueId:
+                      exp: Flow.userUniqueId
+          - transferToAcd:
+              name: Transfer to ACD
+              targetQueue:
+                lit:
+                  name: Journey_Queue
+              preTransferAudio:
+                tts: I will transfer you to the next available agent.
+              failureTransferAudio:
+                tts: Sorry, I could not transfer you at this time.
+              priority:
+                lit: 0
+              preferredAgents:
+                noValue: true
+              languageSkill:
+                noValue: true
+              failureOutputs:
+                errorType:
+                  noValue: true
+                errorMessage:
+                  noValue: true
+          - setFlowOutcome:
+              name: Set Flow Outcome
+              flowOutcomeValue: SUCCESS
+              flowOutcome:
+                name: Journey_Demo
+          - disconnect:
+              name: Disconnect

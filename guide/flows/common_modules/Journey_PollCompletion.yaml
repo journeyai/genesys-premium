@@ -1,0 +1,165 @@
+commonModule:
+  name: Journey_PollCompletion
+  description: Poll API endpoint to check for pipeline completion
+  division: Home
+  supportedLanguages:
+    en-us:
+      none: true
+  variables:
+    - stringVariable:
+        name: Common.completedAt
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+    - stringVariable:
+        name: Common.executionId
+        initialValue:
+          noValue: true
+        isInput: true
+        isOutput: false
+    - booleanVariable:
+        name: Common.success
+        initialValue:
+          lit: false
+        isInput: false
+        isOutput: true
+  settingsCommonModule:
+    compatibleFlowTypes:
+      - flowType: inboundcall
+  settingsActionDefaults:
+    playAudioOnSilence:
+      timeout:
+        lit:
+          seconds: 40
+    detectSilence:
+      timeout:
+        lit:
+          seconds: 40
+    callData:
+      processingPrompt:
+        noValue: true
+    callDataSecure:
+      processingPrompt:
+        noValue: true
+    collectInput:
+      noEntryTimeout:
+        lit:
+          seconds: 5
+    dialByExtension:
+      interDigitTimeout:
+        lit:
+          seconds: 6
+    transferToUser:
+      connectTimeout:
+        noValue: true
+    transferToNumber:
+      connectTimeout:
+        noValue: true
+    transferToGroup:
+      connectTimeout:
+        noValue: true
+    transferToFlowSecure:
+      connectTimeout:
+        lit:
+          seconds: 15
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  startUpTaskActions:
+    - loop:
+        name: Loop
+        currentIndex:
+          var: Task.loopCount
+        loopCount:
+          lit: 60
+        outputs:
+          loop:
+            actions:
+              - playAudio:
+                  name: Pause (1 second)
+                  audio:
+                    exp: AudioPlaybackOptions(ToAudioBlank(1000), true)
+              - flushAudio:
+                  name: Flush Audio
+              - callData:
+                  name: Call Data Action
+                  processingPrompt:
+                    noValue: true
+                  timeout:
+                    lit:
+                      minutes: 1
+                  category:
+                    JOURNEY_APP_Web Services (API Key):
+                      dataAction:
+                        JOURNEY_APP_CheckForCompletion:
+                          inputs:
+                            ID:
+                              exp: Common.executionId
+                          successOutputs:
+                            completedAt:
+                              var: Common.completedAt
+                          failureOutputs:
+                            errorCode:
+                              noValue: true
+                            status:
+                              noValue: true
+                            correlationId:
+                              noValue: true
+                            entityId:
+                              noValue: true
+                            entityName:
+                              noValue: true
+                            userMessage:
+                              noValue: true
+                            userParamsMessage:
+                              noValue: true
+                            userParams.key:
+                              noValue: true
+                            userParams.value:
+                              noValue: true
+                            details.errorCode:
+                              noValue: true
+                            details.fieldName:
+                              noValue: true
+                            details.entityId:
+                              noValue: true
+                            details.entityName:
+                              noValue: true
+                  outputs:
+                    success:
+                      actions:
+                        - decision:
+                            name: "Eval:has completedAt property?"
+                            condition:
+                              exp: IsNotSetOrEmpty(Common.completedAt)
+                            outputs:
+                              "yes":
+                                actions:
+                                  - updateData:
+                                      name: Update Data
+                                      statements:
+                                        - boolean:
+                                            variable: Common.success
+                                            value:
+                                              lit: false
+                              "no":
+                                actions:
+                                  - updateData:
+                                      name: Update Data
+                                      statements:
+                                        - boolean:
+                                            variable: Common.success
+                                            value:
+                                              lit: true
+                                  - loopExit:
+                                      name: Exit Loop
+    - endTask:
+        name: Exit Common Module
+  startUpTaskVariables:
+    - integerVariable:
+        name: Task.loopCount
+        initialValue:
+          noValue: true

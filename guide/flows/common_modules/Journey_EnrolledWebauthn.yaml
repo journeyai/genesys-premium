@@ -1,0 +1,157 @@
+commonModule:
+  name: Journey_EnrolledWebauthn
+  division: Home
+  supportedLanguages:
+    en-us:
+      none: true
+  variables:
+    - booleanVariable:
+        name: Common.enrolledWebauthn
+        initialValue:
+          lit: false
+        isInput: false
+        isOutput: true
+    - stringVariable:
+        name: Common.uniqueId
+        initialValue:
+          noValue: true
+        isInput: true
+        isOutput: false
+  settingsCommonModule:
+    compatibleFlowTypes:
+      - flowType: inboundcall
+  settingsActionDefaults:
+    playAudioOnSilence:
+      timeout:
+        lit:
+          seconds: 40
+    detectSilence:
+      timeout:
+        lit:
+          seconds: 40
+    callData:
+      processingPrompt:
+        noValue: true
+    callDataSecure:
+      processingPrompt:
+        noValue: true
+    collectInput:
+      noEntryTimeout:
+        lit:
+          seconds: 5
+    dialByExtension:
+      interDigitTimeout:
+        lit:
+          seconds: 6
+    transferToUser:
+      connectTimeout:
+        noValue: true
+    transferToNumber:
+      connectTimeout:
+        noValue: true
+    transferToGroup:
+      connectTimeout:
+        noValue: true
+    transferToFlowSecure:
+      connectTimeout:
+        lit:
+          seconds: 15
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  startUpTaskActions:
+    - callData:
+        name: Call Data Action
+        processingPrompt:
+          noValue: true
+        timeout:
+          lit:
+            minutes: 1
+        category:
+          JOURNEY_APP_Web Services (API Key):
+            dataAction:
+              JOURNEY_APP_LookupCustomer:
+                inputs:
+                  uniqueId:
+                    exp: Common.uniqueId
+                successOutputs:
+                  id:
+                    noValue: true
+                  type:
+                    noValue: true
+                  uniqueId:
+                    noValue: true
+                  firstName:
+                    noValue: true
+                  lastName:
+                    noValue: true
+                  phoneNumbers:
+                    noValue: true
+                  devices:
+                    noValue: true
+                  email:
+                    noValue: true
+                  enrollments.type:
+                    var: Task.enrollments
+                failureOutputs:
+                  errorCode:
+                    noValue: true
+                  status:
+                    noValue: true
+                  correlationId:
+                    noValue: true
+                  entityId:
+                    noValue: true
+                  entityName:
+                    noValue: true
+                  userMessage:
+                    noValue: true
+                  userParamsMessage:
+                    noValue: true
+                  userParams.key:
+                    noValue: true
+                  userParams.value:
+                    noValue: true
+                  details.errorCode:
+                    noValue: true
+                  details.fieldName:
+                    noValue: true
+                  details.entityId:
+                    noValue: true
+                  details.entityName:
+                    noValue: true
+        outputs:
+          success:
+            actions:
+              - decision:
+                  name: Decision
+                  condition:
+                    exp: Count(Find(Task.enrollments, "webauthn")) > 0
+                  outputs:
+                    "yes":
+                      actions:
+                        - updateData:
+                            name: Update Data
+                            statements:
+                              - boolean:
+                                  variable: Common.enrolledWebauthn
+                                  value:
+                                    lit: true
+                    "no":
+                      actions:
+                        - updateData:
+                            name: Update Data
+                            statements:
+                              - boolean:
+                                  variable: Common.enrolledWebauthn
+                                  value:
+                                    lit: false
+    - endTask:
+        name: Exit Common Module
+  startUpTaskVariables:
+    - stringCollectionVariable:
+        name: Task.enrollments
+        initialValue:
+          noValue: true

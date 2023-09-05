@@ -22,6 +22,10 @@ Here is a typical use case.
 
 ## Setup
 
+Installing the Journey Premium Application embed the Journey admin app (https://app.journeyid.io/) as a native Genesys app, provision a related "role" and "group", and create a few "data actions" that streamline the use of typical Journey APIs.
+
+This guide will walk you through installing the app, then configuring the building blocks that will let you build powerful, custom inbound and outbound call flows involving Journey.
+
 ### Installing the Premium Application
 
 ### Configuring data actions
@@ -45,14 +49,14 @@ From here, navigate to the “Credentials” tab and you can hit the “change�
 
 ### Creating the common module flows
 
-The next level of building block that will enable powerful, custom inbound and outbound flows involving Journey is the “common module”.
+The next level of building block that will enable powerful, custom inbound and outbound flows involving Journey is the "common module".
 
 We would suggest building some common modules that relate to the data actions created automatically.
 
-For example, here is one for “ExecutePipeline”. It simply calls the JOURNEY_APP_ExecutePipeline data action, passing along requisite info, then evaluates the response. If the response contains an “executionId” then the task was a success, otherwise a failure.
+For example, here is one for “ExecutePipeline”. It simply calls the `JOURNEY_APP_ExecutePipeline` data action, passing along requisite info, then evaluates the response. If the response contains an “executionId” then the task was a success, otherwise a failure.
 
 ![common module for ExecutePipeline](./images/common_module_execute_pipeline.png)
 
-Next, here is a more complex common flow relating to the “checkForCompletion” data action. Here we use the data action to check the Journey API to see if a given pipeline has been completed (ie, if the response contains the “completedAt” field). If so, return success, if not, return failure. The tricky part is that we loop 60 times before timing out, and we hijack the audio capability to provide a brief pause between loops.
+Next, here is a more complex common flow relating to the `JOURNEY_APP_CheckForCompletion` data action. Here we use the data action to check the Journey API to see if a given pipeline has been completed (ie, if the response contains the `completedAt` field). If so, return success, if not, return failure. The tricky part is that we loop 60 times before timing out, and we hijack the audio capability to provide a brief pause between loops.
 
 ![common module to poll for completion](./images/common_module_poll_completion.png)
