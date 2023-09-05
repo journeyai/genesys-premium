@@ -63,7 +63,7 @@ Here is one for “ExecutePipeline”. It simply calls the `JOURNEY_APP_ExecuteP
 
 ![common module for ExecutePipeline](./images/common_module_execute_pipeline.png)
 
-> You import and customize from the provided YAML here: [./flows/common_modules/Journey_ExecutePipeline.yaml](./flows/common_modules/Journey_ExecutePipeline.yaml).
+> You can import and customize from the provided YAML here: [./flows/common_modules/Journey_ExecutePipeline.yaml](./flows/common_modules/Journey_ExecutePipeline.yaml).
 
 #### EnrolledWebauthn
 
@@ -77,7 +77,7 @@ If the customer is recognized, the response from Journey will include a list of 
 
 The expression looks like this: `Count(Find(Task.enrollments, "webauthn")) > 0`.
 
-> You import and customize from the provided YAML here: [./flows/common_modules/Journey_EnrolledWebauthn.yaml](./flows/common_modules/Journey_EnrolledWebauthn.yaml).
+> You can import and customize from the provided YAML here: [./flows/common_modules/Journey_EnrolledWebauthn.yaml](./flows/common_modules/Journey_EnrolledWebauthn.yaml).
 
 #### PollForCompletion
 
@@ -87,7 +87,7 @@ Finally, here is a more complex common flow relating to the `JOURNEY_APP_CheckFo
 
 Here we use the data action to check the Journey API to see if a given pipeline has been completed (ie, we submit the execution ID and see if the response contains the `completedAt` field). If so, return success, if not, return failure. The tricky part is that we loop 60 times before timing out, and we hijack the audio capability to provide a brief pause between loops.
 
-> You import and customize from the provided YAML here: [./flows/common_modules/Journey_PollCompletion.yaml](./flows/common_modules/Journey_PollCompletion.yaml).
+> You can import and customize from the provided YAML here: [./flows/common_modules/Journey_PollCompletion.yaml](./flows/common_modules/Journey_PollCompletion.yaml).
 
 ### Creating the inbound flow
 
@@ -117,7 +117,7 @@ In the "Journey_Transfer" reusable task...
 
 - Use the screen pop widget embed the Journey iFrame in the agent's Pure Cloud interface, using a Genesys script. (More details below.)
 
-> You import and customize from the provided YAML here: [./flows/Journey_IB_Demo.yaml](./flows/Journey_IB_Demo.yaml).
+> You can import and customize from the provided YAML here: [./flows/Journey_IB_Demo.yaml](./flows/Journey_IB_Demo.yaml).
 
 #### Script - Embedded iFrame
 
@@ -134,3 +134,5 @@ The script should contain a single web page element, with the following URL:
 ![agent iframe script](./images/agent_iframe_script.png)
 
 The iFrame will be configured on the Journey side, in the admin app, under the iFrame tab. There is a submenu for "deployment instructions" wherein you can generate the necessary token.
+
+> You can import an example [here](./flows/journey_iframe.script).
