@@ -92,13 +92,13 @@ export default {
         ],
       },
     ],
-    group: [
-      {
-        name: "Supervisors",
-        description:
-          "Supervisors have the ability to watch a queue for ACD conversations.",
-      },
-    ],
+    // group: [
+    //   {
+    //     name: "Supervisors",
+    //     description:
+    //       "Supervisors have the ability to watch a queue for ACD conversations.",
+    //   },
+    // ],
     // "app-instance": [
     //   {
     //     name: "Partner Enablement Tools",

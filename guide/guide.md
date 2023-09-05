@@ -22,7 +22,7 @@ Here is a typical use case.
 
 ## Setup
 
-Installing the Journey Premium Application embed the Journey admin app (https://app.journeyid.io/) as a native Genesys app, provision a related "role" and "group", and create a few "data actions" that streamline the use of typical Journey APIs.
+Installing the Journey Premium Application embed the Journey admin app (https://app.journeyid.io/) as a native Genesys app, provision a related "role", and create a few "data actions" that streamline the use of typical Journey APIs.
 
 This guide will walk you through installing the app, then configuring the building blocks that will let you build powerful, custom inbound and outbound call flows involving Journey.
 
