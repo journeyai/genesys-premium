@@ -164,7 +164,7 @@ inboundCall:
           - callCommonModule:
               name: Call Common Module
               commonModule:
-                Journey_ExecutePipeline:
+                Journey_CreateExecution:
                   ver_latestPublished:
                     inputs:
                       Common.uniqueId:
@@ -248,10 +248,13 @@ inboundCall:
                   noValue: true
                 errorMessage:
                   noValue: true
-          - setFlowOutcome:
-              name: Set Flow Outcome
-              flowOutcomeValue: SUCCESS
-              flowOutcome:
-                name: Journey_Demo
+              outputs:
+                failure:
+                  actions:
+                    - setFlowOutcome:
+                        name: Set Flow Outcome
+                        flowOutcomeValue: FAILURE
+                        flowOutcome:
+                          name: Journey_Demo
           - disconnect:
               name: Disconnect

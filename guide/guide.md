@@ -88,3 +88,49 @@ Finally, here is a more complex common flow relating to the `JOURNEY_APP_CheckFo
 Here we use the data action to check the Journey API to see if a given pipeline has been completed (ie, we submit the execution ID and see if the response contains the `completedAt` field). If so, return success, if not, return failure. The tricky part is that we loop 60 times before timing out, and we hijack the audio capability to provide a brief pause between loops.
 
 > You import and customize from the provided YAML here: [./flows/common_modules/Journey_PollCompletion.yaml](./flows/common_modules/Journey_PollCompletion.yaml).
+
+### Creating the inbound flow
+
+With all the building blocks in place, you can now create an inbound call flow. The following is a minimal example, which can be customized to your needs. A brief explanation is given, along with screenshots. Details can be found in the exported YAML.
+
+![inbound call flow part 1](./images/inbound_call_pt1.png)
+
+In the "call start" section...
+
+- The inbound call is received.
+- Variables for `userUniqueId` and `userPhoneNumber` are set, which are based on the ANI, and make it easier to interact with the Journey APIs.
+- The `Journey_EnrolledWebauthn` common module is called, to see if the user is enrolled in FIDO/Webauthn.
+- If so, we will try to authenticate them using a "reusable task", ensuring the best possible service.
+- If not, we will simply transfer them to an agent in an unauthenticated state.
+
+![inbound call flow part 2](./images/inbound_call_pt2.png)
+
+In the "Journey_Authenticate" reusable task...
+
+- We use the "Journey_ExecutePipeline" common module to send an SMS to the user, with a link to complete authentication.
+- We use the "Journey_PollCompletion" common module to wait up to one minute for the user to complete authentication.
+- If authentication is completed successfully before timeout, we play a success message before transferring to an agent. otherwise, we simply transfer to an agent in an unauthenticated state.
+
+![inbound call flow part 3](./images/inbound_call_pt3.png)
+
+In the "Journey_Transfer" reusable task...
+
+- Use the screen pop widget embed the Journey iFrame in the agent's Pure Cloud interface, using a Genesys script. (More details below.)
+
+> You import and customize from the provided YAML here: [./flows/Journey_IB_Demo.yaml](./flows/Journey_IB_Demo.yaml).
+
+#### Script - Embedded iFrame
+
+One part of this flow requires additional explanation.
+
+To embed the Journey Agent iFrame into Genesys Pure Cloud interface, we use a screen pop widget in the previous step which is linked to a script.
+
+That script must be configured in the Genesys admin panel. The settings can be found in "scripts" under "contact center".
+
+The script should contain a single web page element, with the following URL:
+
+`https://i.journeyid.io/?token=[[INSERT_TOKEN_HERE]]&session%5BexternalRef%5D={{Scripter.Interaction ID}}&user%5BuniqueId%5D={{userUniqueId}}&user%5BphoneNumber%5D={{userPhoneNumber}}`
+
+![agent iframe script](./images/agent_iframe_script.png)
+
+The iFrame will be configured on the Journey side, in the admin app, under the iFrame tab. There is a submenu for "deployment instructions" wherein you can generate the necessary token.

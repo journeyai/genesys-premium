@@ -1,0 +1,248 @@
+{
+  "id": "800051e6-1751-4d59-a0d5-1fe546343474",
+  "createdDate": "2023-06-28T18:23:20.591Z",
+  "modifiedDate": "2023-08-02T16:36:23.691Z",
+  "name": "Agent - Journey iFrame",
+  "organizationId": "dc76caa9-b5b1-4acf-aeab-a1bea44a6e3b",
+  "versionId": "44530687-bbfd-4a7f-8bbf-cb4c0bb1bc1b",
+  "startPageId": "7bb360f0-6d35-4fe5-9cf4-f16149206c8d",
+  "pages": [
+    {
+      "id": "7bb360f0-6d35-4fe5-9cf4-f16149206c8d",
+      "createdDate": "2023-08-02T16:36:22.969Z",
+      "modifiedDate": "2023-08-02T16:36:22.969Z",
+      "name": "Start Page",
+      "organizationId": "dc76caa9-b5b1-4acf-aeab-a1bea44a6e3b",
+      "scriptId": "800051e6-1751-4d59-a0d5-1fe546343474",
+      "versionId": "44530687-bbfd-4a7f-8bbf-cb4c0bb1bc1b",
+      "properties": {
+        "onLoadAction": {
+          "typeName": "action",
+          "value": {}
+        },
+        "backgroundColor": {
+          "typeName": "null"
+        }
+      },
+      "dataVersion": 0,
+      "rootContainer": {
+        "type": "verticalStackContainer",
+        "properties": {
+          "margin": {
+            "typeName": "spacing",
+            "value": 0
+          },
+          "alignment": {
+            "typeName": "alignment",
+            "value": "start"
+          },
+          "width": {
+            "typeName": "sizing",
+            "value": {
+              "sizeType": "stretch",
+              "size": 100
+            }
+          },
+          "height": {
+            "typeName": "sizing",
+            "value": {
+              "sizeType": "stretch",
+              "size": 100
+            }
+          },
+          "visible": {
+            "typeName": "variable"
+          },
+          "backgroundColor": {
+            "typeName": "null"
+          },
+          "padding": {
+            "typeName": "spacing",
+            "value": 10
+          },
+          "childArrangement": {
+            "typeName": "childArrangement",
+            "value": "start"
+          },
+          "border": {
+            "typeName": "border",
+            "value": {
+              "width": 0,
+              "style": "solid",
+              "color": "000000"
+            }
+          }
+        },
+        "children": [
+          {
+            "type": "webPage",
+            "properties": {
+              "margin": {
+                "typeName": "spacing",
+                "value": [
+                  5,
+                  5,
+                  5,
+                  5
+                ]
+              },
+              "alignment": {
+                "typeName": "alignment",
+                "value": "start"
+              },
+              "width": {
+                "typeName": "sizing",
+                "value": {
+                  "sizeType": "pixels",
+                  "size": 800
+                }
+              },
+              "height": {
+                "typeName": "sizing",
+                "value": {
+                  "sizeType": "pixels",
+                  "size": 500
+                }
+              },
+              "visible": {
+                "typeName": "variable"
+              },
+              "webPageSource": {
+                "typeName": "interpolatedText",
+                "value": "https://i.journeyid.io/?token=[[YOUR_TOKEN_HERE]]&session%5BexternalRef%5D={{scripter.interactionId}}&user%5BuniqueId%5D={{e40d3597-ed4d-45d0-a290-8fa35404ddc2}}&user%5BphoneNumber%5D={{4ed1344e-bc66-481c-8937-dcf8206cdb20}}"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "features": {
+    "dialer": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": true
+        },
+        "contactListId": {
+          "typeName": "text",
+          "value": ""
+        },
+        "onContactDataLoadAction": {
+          "typeName": "action",
+          "value": {}
+        }
+      }
+    },
+    "scripter": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": true
+        }
+      }
+    },
+    "screenPop": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": true
+        }
+      }
+    },
+    "callback": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    },
+    "chat": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    },
+    "email": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    },
+    "message": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    },
+    "bridge": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    },
+    "uuiData": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    },
+    "customerSecuredData": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    },
+    "list": {
+      "properties": {
+        "enabled": {
+          "typeName": "boolean",
+          "value": false
+        }
+      }
+    }
+  },
+  "variables": [
+    {
+      "id": "4ed1344e-bc66-481c-8937-dcf8206cdb20",
+      "name": "userPhoneNumber",
+      "description": "User phone number in E.164 format",
+      "type": {
+        "isDynamic": false,
+        "isList": false,
+        "name": "string"
+      },
+      "value": "",
+      "input": true,
+      "output": false
+    },
+    {
+      "id": "e40d3597-ed4d-45d0-a290-8fa35404ddc2",
+      "name": "userUniqueId",
+      "description": "User unique Id, for Journey",
+      "type": {
+        "isDynamic": false,
+        "isList": false,
+        "name": "string"
+      },
+      "value": "",
+      "input": true,
+      "output": false
+    }
+  ],
+  "customActions": [],
+  "dataVersion": 0
+}
