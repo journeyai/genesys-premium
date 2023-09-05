@@ -1,13 +1,13 @@
 export default {
   clientID: "f79f98a7-1100-492a-8cea-5735dd6de976",
 
-  wizardUriBase: "http://localhost:8080/wizard/",
-  // wizardUriBase: "https://journeyai.github.io/genesys-premium/wizard/",
+  // wizardUriBase: "http://localhost:8080/wizard/",
+  wizardUriBase: "https://journeyai.github.io/genesys-premium/wizard/",
 
   // The actual URL of the landing page of your web app or your web site (when wizard has been run).
   // previously - defined as premiumAppURL
-  redirectURLOnWizardCompleted:
-    "http://localhost:8080/premium-app-sample/index.html",
+  // redirectURLOnWizardCompleted:
+  //   "http://localhost:8080/premium-app-sample/index.html",
   redirectURLOnWizardCompleted: "https://app.journeyid.io",
   redirectURLWithParams: true,
 
