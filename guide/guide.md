@@ -10,7 +10,7 @@ Here is a typical use case.
 
 1. A known user calls into a call center, powered by Genesys Architect. They want to speak to an agent.
 
-2. We recognize the phone number, and see the user has registered with device-based biometric authentication (aka FIDO). Therefore, we can authenticate them digitally, quickly and easily, before an agent gets on the line.
+2. We recognize the phone number, and see the user has registered with device-based biometric authentication (aka FIDO, aka webauthn). Therefore, we can authenticate them digitally, quickly and easily, before an agent gets on the line.
 
 3. Using a Journey pipeline, we send them an SMS with a link to complete authentication. ![use_case_pt1](./images/use_case_pt1.png)
 
@@ -27,6 +27,10 @@ Installing the Journey Premium Application embed the Journey admin app (https://
 This guide will walk you through installing the app, then configuring the building blocks that will let you build powerful, custom inbound and outbound call flows involving Journey.
 
 ### Installing the Premium Application
+
+Find the Journey App in the Genesys Appfoundry marketplace.
+
+Walk through the installation wizard.
 
 ### Configuring data actions
 
@@ -53,10 +57,34 @@ The next level of building block that will enable powerful, custom inbound and o
 
 We would suggest building some common modules that relate to the data actions created automatically.
 
-For example, here is one for “ExecutePipeline”. It simply calls the `JOURNEY_APP_ExecutePipeline` data action, passing along requisite info, then evaluates the response. If the response contains an “executionId” then the task was a success, otherwise a failure.
+#### ExecutePipeline
+
+Here is one for “ExecutePipeline”. It simply calls the `JOURNEY_APP_ExecutePipeline` data action, passing along requisite info, then evaluates the response. If the response contains an `executionId` then the operation was a success, otherwise a failure.
 
 ![common module for ExecutePipeline](./images/common_module_execute_pipeline.png)
 
-Next, here is a more complex common flow relating to the `JOURNEY_APP_CheckForCompletion` data action. Here we use the data action to check the Journey API to see if a given pipeline has been completed (ie, if the response contains the `completedAt` field). If so, return success, if not, return failure. The tricky part is that we loop 60 times before timing out, and we hijack the audio capability to provide a brief pause between loops.
+> You import and customize from the provided YAML here: [./flows/common_modules/Journey_ExecutePipeline.yaml](./flows/common_modules/Journey_ExecutePipeline.yaml).
+
+#### EnrolledWebauthn
+
+Here is a similar common module flow that checks if the user who has called in enrolled with Journey in passwordless authentication, in this case FIDO/Webauthn.
+
+![common module for EnrolledWebauthn](./images/common_module_enrolledWebauthn.png)
+
+We use the `JOURNEY_APP_LookupCustomer` data action, to call the Journey API and see if we can recognize this customer by their uniqueId, which is typically derived from their phone number. (Ie, if their phone number is +15555555555, then their uniqueId is 15555555555).
+
+If the customer is recognized, the response from Journey will include a list of their "enrollments". We can use the Genesys expression builder to check that list of enrollments for the one we care about-- "webauthn". If found,this module will return `enrolledWebauthn: true`, otherwise `enrolledWebauthn: false`.
+
+The expression looks like this: `Count(Find(Task.enrollments, "webauthn")) > 0`.
+
+> You import and customize from the provided YAML here: [./flows/common_modules/Journey_EnrolledWebauthn.yaml](./flows/common_modules/Journey_EnrolledWebauthn.yaml).
+
+#### PollForCompletion
+
+Finally, here is a more complex common flow relating to the `JOURNEY_APP_CheckForCompletion` data action.
 
 ![common module to poll for completion](./images/common_module_poll_completion.png)
+
+Here we use the data action to check the Journey API to see if a given pipeline has been completed (ie, we submit the execution ID and see if the response contains the `completedAt` field). If so, return success, if not, return failure. The tricky part is that we loop 60 times before timing out, and we hijack the audio capability to provide a brief pause between loops.
+
+> You import and customize from the provided YAML here: [./flows/common_modules/Journey_PollCompletion.yaml](./flows/common_modules/Journey_PollCompletion.yaml).
