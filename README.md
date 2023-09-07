@@ -63,6 +63,16 @@ export default {
 };
 ```
 
+Also note:
+
+```sh
+# default application URL
+https://journeyai.github.io/genesys-premium/wizard?langTag={{gcLangTag}}&hostOrigin={{gcHostOrigin}}&targetEnv={{gcTargetEnv}}
+
+# dev URL
+http://localhost:8080/wizard/index.html?langTag={{pcLangTag}}&environment={{pcEnvironment}}
+```
+
 ## Helpful Links
 
 - [Premium Application Wizard Step by Step Guide](https://developer.genesys.cloud/appfoundry/premium-app-wizard/ "Opens the premium app guide in Genesys Developer Center")
