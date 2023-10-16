@@ -74,6 +74,9 @@ export default {
   // To be added to names of Genesys Cloud objects created by the wizard
   prefix: "JOURNEY_APP_",
 
+  // Alan added to enable hash of clientSecret. Is it allowed?
+  const { createHash } = require('crypto');
+
   // These are the Genesys Cloud items that will be added and provisioned by the wizard
   // To see the sample configuration of all possible objects please consult
   // ./sample-provisioning-info.js on the same folder
@@ -122,14 +125,24 @@ export default {
     // ],
     "ws-data-actions": [
       {
-        name: "Web Services (API Key)",
+        name: "JourneyId Web Service Connector",
         autoEnable: true,
-        credentialType: "userDefined",
+        credentialType: "userDefinedOAuth",
         credentials: {
-          apiKey: "123",
+          loginUrl: "https://app.journeyid.io/api/system/auth/token",
+          clientId: "${input.clientId}",
+          clientSecret: "${input.clientSecret}",  // createHash('sha256').update(${input.clientSecret}).digest('hex');
         },
-        notes:
-          "Update the Journey api key under the credentials tab.\nIt should be a 'user defined' credential type, with the field name 'apiKey'.",
+      // OLD hardcoded bearerToken
+      // {
+      //   name: "Web Services (API Key)",
+      //   autoEnable: true,
+      //   credentialType: "userDefined",
+      //   credentials: {
+      //     apiKey: "123",
+      //   },
+      //   notes:
+      //     "Update the Journey api key under the credentials tab.\nIt should be a 'user defined' credential type, with the field name 'apiKey'.",
         "data-actions": [
           // ----- ws data action #1: ExecutePipeline -----
           {
@@ -143,7 +156,8 @@ export default {
                 requestType: "POST",
                 headers: {
                   Accept: "application/json",
-                  Authorization: "Bearer ${credentials.apiKey}",
+                  Authorization: "${authResponse.token_type} ${authResponse.access_token}",
+                  // Authorization: "Bearer ${credentials.apiKey}",
                   "Content-Type": "application/json",
                 },
                 requestTemplate:
@@ -201,7 +215,6 @@ export default {
               },
             },
           },
-
           // ----- ws data action #2: CheckForCompletion -----
           {
             name: "CheckForCompletion",
@@ -214,7 +227,8 @@ export default {
                 requestType: "GET",
                 headers: {
                   Accept: "application/json",
-                  Authorization: "Bearer ${credentials.apiKey}",
+                  Authorization: "${authResponse.token_type} ${authResponse.access_token}",
+                  // Authorization: "Bearer ${credentials.apiKey}",
                   "Content-Type": "application/json",
                 },
                 requestTemplate: "${input.rawRequest}",
@@ -251,7 +265,6 @@ export default {
               },
             },
           },
-
           // ----- ws data action #3: LookupCustomer -----
           {
             name: "LookupCustomer",
@@ -264,7 +277,8 @@ export default {
                   "https://app.journeyid.io/api/system/customers/lookup?unique_id=${input.uniqueId}",
                 requestType: "GET",
                 headers: {
-                  authorization: "Bearer ${credentials.apiKey}",
+                  Authorization: "${authResponse.token_type} ${authResponse.access_token}",
+                  // Authorization: "Bearer ${credentials.apiKey}",
                 },
                 requestTemplate: "${input.rawRequest}",
               },
