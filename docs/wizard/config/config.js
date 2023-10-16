@@ -147,7 +147,7 @@ export default {
                   "Content-Type": "application/json",
                 },
                 requestTemplate:
-                  '{ "pipelineKey": "${input.pipelineKey}", "delivery": { "method": "${input.deliveryMethod}", "phoneNumber": "${input.userPhoneNumber}" }, "customer": { "uniqueId": "${input.userUniqueId}" }, "session": { "externalRef": "${input.interactionId}" }, "language": "en-US"}',
+                  '{ "pipelineKey": "${input.pipelineKey}", "delivery": { "method": "${input.deliveryMethod}", "phoneNumber": "${input.userPhoneNumber}" }, "customer": { "uniqueId": "${input.userUniqueId}" }, "phoneNumber": "${input.userPhoneNumber}", "session": { "externalRef": "${input.interactionId}" }, "language": "${input.language}", "iframeId":"${input.iframeId}"}',
               },
               response: {
                 translationMap: {
@@ -176,6 +176,12 @@ export default {
                       type: "string",
                     },
                     deliveryMethod: {
+                      type: "string",
+                    },
+                    language: {
+                      type: "string",
+                    },
+                    iframeId: {
                       type: "string",
                     },
                   },
