@@ -74,9 +74,6 @@ export default {
   // To be added to names of Genesys Cloud objects created by the wizard
   prefix: "JOURNEY_APP_",
 
-  // Alan added to enable hash of clientSecret. Is it allowed?
-  const { createHash } = require('crypto');
-
   // These are the Genesys Cloud items that will be added and provisioned by the wizard
   // To see the sample configuration of all possible objects please consult
   // ./sample-provisioning-info.js on the same folder
@@ -125,13 +122,13 @@ export default {
     // ],
     "ws-data-actions": [
       {
-        name: "JourneyId Web Service Connector",
+        name: "Connector",
         autoEnable: true,
         credentialType: "userDefinedOAuth",
         credentials: {
           loginUrl: "https://app.journeyid.io/api/system/auth/token",
           clientId: "${input.clientId}",
-          clientSecret: "${input.clientSecret}",  // createHash('sha256').update(${input.clientSecret}).digest('hex');
+          clientSecret: "${input.clientSecret}"
         },
       // OLD hardcoded bearerToken
       // {
