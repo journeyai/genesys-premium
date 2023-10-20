@@ -1,8 +1,8 @@
 export default {
   clientID: "f79f98a7-1100-492a-8cea-5735dd6de976",
 
-  wizardUriBase: "http://localhost:8080/wizard?langTag=en-use&environment=usw2.pure.cloud",  //  https://df8d-76-155-85-187.ngrok-free.app/wizard?langTag=en-use&environment=usw2.pure.cloud
-  // wizardUriBase: "https://journeyai.github.io/genesys-premium/wizard?langTag=en-use&environment=usw2.pure.cloud",
+  // wizardUriBase: "http://localhost:8080/wizard?langTag=en-use&environment=usw2.pure.cloud",  //  https://df8d-76-155-85-187.ngrok-free.app/wizard?langTag=en-use&environment=usw2.pure.cloud
+  wizardUriBase: "https://journeyai.github.io/genesys-premium/wizard",
 
   // The actual URL of the landing page of your web app or your web site (when wizard has been run).
   // previously - defined as premiumAppURL
