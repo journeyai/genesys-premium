@@ -126,11 +126,11 @@ export default {
         credentialType: "userDefinedOAuth",
         credentials: {
           loginUrl: "https://app.journeyid.io/api/system/auth/token",
-          clientId: "123",
-          clientSecret: "321"
+          client_id: "123",
+          client_secret: "321"
         },
         // notes:
-        // "Update the Journey loginUrl, clientId & clientSecret under the credentials tab.\nIt should be a 'userDefinedOAuth' credential type, with the field name 'loginUrl','clientId' and 'clientSecret'.",
+        // "Update the Journey loginUrl, client_id & client_secret under the credentials tab.\nIt should be a 'userDefinedOAuth' credential type, with the field name 'loginUrl','client_id' and 'client_secret'.",
       // OLD hardcoded bearerToken
       // {
       //   name: "Web Services (API Key)",
