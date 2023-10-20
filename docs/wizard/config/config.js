@@ -1,8 +1,8 @@
 export default {
   clientID: "f79f98a7-1100-492a-8cea-5735dd6de976",
 
-  // wizardUriBase: "http://localhost:8080/wizard?langTag=en-use&environment=usw2.pure.cloud",  //  https://df8d-76-155-85-187.ngrok-free.app/wizard?langTag=en-use&environment=usw2.pure.cloud
-  wizardUriBase: "https://journeyai.github.io/genesys-premium/wizard",
+  // wizardUriBase: "http://localhost:8080/wizard/",  //  ?langTag=en-use&environment=usw2.pure.cloud
+  wizardUriBase: "https://journeyai.github.io/genesys-premium/wizard/",
 
   // The actual URL of the landing page of your web app or your web site (when wizard has been run).
   // previously - defined as premiumAppURL
@@ -126,11 +126,11 @@ export default {
         credentialType: "userDefinedOAuth",
         credentials: {
           loginUrl: "https://app.journeyid.io/api/system/auth/token",
-          client_id: "123",
-          client_secret: "321"
+          clientId: "123",
+          clientSecret: "321"
         },
-        // notes:
-        // "Update the Journey loginUrl, client_id & client_secret under the credentials tab.\nIt should be a 'userDefinedOAuth' credential type, with the field name 'loginUrl','client_id' and 'client_secret'.",
+        notes:
+          "Update the Journey loginUrl, clientId and clientSecret under the credentials tab.\nIt should be a 'userDefinedOAuth' credential type, with the field name 'loginUrl', 'clientId' and 'clientSecret'.",
       // OLD hardcoded bearerToken
       // {
       //   name: "Web Services (API Key)",
@@ -153,9 +153,8 @@ export default {
                   "https://app.journeyid.io/api/system/executions",
                 requestType: "POST",
                 headers: {
-                  Accept: "application/json",
-                  Authorization: "${authResponse.token_type} ${authResponse.access_token}",
-                  // Authorization: "Bearer ${credentials.apiKey}",
+                  Authorization: "Bearer ${authResponse.access_token}",
+                  "Accept": "application/json",
                   "Content-Type": "application/json",
                 },
                 requestTemplate:
@@ -224,9 +223,8 @@ export default {
                   "https://app.journeyid.io/api/system/executions/${input.ID}",
                 requestType: "GET",
                 headers: {
-                  Accept: "application/json",
-                  Authorization: "${authResponse.token_type} ${authResponse.access_token}",
-                  // Authorization: "Bearer ${credentials.apiKey}",
+                  Authorization: "Bearer ${authResponse.access_token}",
+                  "Accept": "application/json",
                   "Content-Type": "application/json",
                 },
                 requestTemplate: "${input.rawRequest}",
@@ -275,8 +273,9 @@ export default {
                   "https://app.journeyid.io/api/system/customers/lookup?unique_id=${input.uniqueId}",
                 requestType: "GET",
                 headers: {
-                  Authorization: "${authResponse.token_type} ${authResponse.access_token}",
-                  // Authorization: "Bearer ${credentials.apiKey}",
+                  Authorization: "Bearer ${authResponse.access_token}",
+                  "Accept":"application/json",
+                  "Content-Type":"application/x-www-form-urlencoded",
                 },
                 requestTemplate: "${input.rawRequest}",
               },
