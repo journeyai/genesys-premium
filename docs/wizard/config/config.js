@@ -68,7 +68,7 @@ export default {
 
   // Allows you to deprovision the installed object by adding the query parameter 'uninstall=true'
   // in the wizard URL. This is merely for testing and should be 'false' in production.
-  enableUninstall: true,
+  enableUninstall: false,
 
   // To be added to names of Genesys Cloud objects created by the wizard
   prefix: "JOURNEY_APP_",
