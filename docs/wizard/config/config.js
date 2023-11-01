@@ -16,7 +16,7 @@ export default {
   //            Once your premium app is approved an integration type will be created
   //            by the Genesys Cloud product team and you can update the name at that time.
   // previously - defined as appName
-  premiumAppIntegrationTypeId: "premium-app-example",
+  premiumAppIntegrationTypeId: "premium-app-journeyid",
 
   // Optional - Some Premium Applications leverage both a premium app and a premium widget
   premiumWidgetIntegrationTypeId: "premium-widget-example",
@@ -26,7 +26,7 @@ export default {
   //      'integration:examplePremiumApp:view'. Once your premium app is approved,
   //      the unique integration domain will be generated and this must be updated.
   // previously - defined as viewPermission
-  premiumAppViewPermission: "integration:examplePremiumApp:view",
+  premiumAppViewPermission: "integration:journeyId:view",
   // Permissions required for running the Wizard App
   // all, premium, wizard, none (default)
   checkInstallPermissions: "none",
@@ -84,7 +84,7 @@ export default {
         permissionPolicies: [
           {
             domain: "integration",
-            entityName: "examplePremiumApp",
+            entityName: "journeyId",
             actionSet: ["*"],
             allowConditions: false,
           },
@@ -131,16 +131,6 @@ export default {
         },
         notes:
           "Update the Journey loginUrl, clientId and clientSecret under the credentials tab.\nIt should be a 'userDefinedOAuth' credential type, with the field name 'loginUrl', 'clientId' and 'clientSecret'.",
-      // OLD hardcoded bearerToken
-      // {
-      //   name: "Web Services (API Key)",
-      //   autoEnable: true,
-      //   credentialType: "userDefined",
-      //   credentials: {
-      //     apiKey: "123",
-      //   },
-      //   notes:
-      //     "Update the Journey api key under the credentials tab.\nIt should be a 'user defined' credential type, with the field name 'apiKey'.",
         "data-actions": [
           // ----- ws data action #1: ExecutePipeline -----
           {
@@ -352,6 +342,65 @@ export default {
               },
             },
           },
+          // ----- ws data action #4: Generate iframe JWT -----
+          // {
+          //   name: "GenerateIframeToken",
+          //   secure: false,
+          //   autoPublish: true,
+          //   config: {
+          //     request: {
+          //       requestUrlTemplate:
+          //         "https://us-west1-alan-sandbox-363122.cloudfunctions.net/cf-jwt-relay",
+          //       requestType: "POST",
+          //       headers: {
+          //         Authorization: "Bearer ${authResponse.access_token}",
+          //         "Accept": "application/json",
+          //         "Content-Type": "application/json",
+          //       },
+          //       requestTemplate:
+          //         '{"action":"jwt","context":{"iframe":"${input.iframeId}","secret":"${input.iframeSecret}"},"agent":"${input.agentId}"}',
+          //     },
+          //     response: {
+          //       translationMap: {
+          //         iframeToken: "$.context.iframeToken",
+          //       },
+          //       translationMapDefaults: {},
+          //       successTemplate: '{"context":{"iframeToken":"${iframeToken}"}}',
+          //       // successTemplate: '{"action":"jwt","context":{"iframe":"${iframeId}","agent":"${agentId}","secret":"${iframeSecret}"},"iframeToken":"${iframeToken}"}}',
+          //     },
+          //   },
+          //   contract: {
+          //     input: {
+          //       inputSchema: {
+          //         title: "Journey",
+          //         type: "object",
+          //         properties: {
+          //           iframeId: {
+          //             type: "string",
+          //           },
+          //           agentId: {
+          //             type: "string",
+          //           },
+          //           iframeSecret: {
+          //             type: "string",
+          //           },
+          //         },
+          //         additionalProperties: true,
+          //       },
+          //     },
+          //     output: {
+          //       successSchema: {
+          //         type: "object",
+          //         properties: {
+          //           iframeToken: {
+          //             type: "string",
+          //           },
+          //         },
+          //         additionalProperties: true,
+          //       },
+          //     },
+          //   },
+          // },
         ],
       },
     ],
